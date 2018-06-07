@@ -1,5 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS  pgcrypto;
-
 DROP DATABASE IF EXISTS rental_app;
 CREATE DATABASE rental_app;
 
