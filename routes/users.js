@@ -31,13 +31,14 @@ const genJti = () => {
   return jti;
 }
 
-// Route to signup and create new user
 router.post('/users', (req, res, next) => {
   query.createUser(req.body)
-    .then(() => {
+    .then(user => {
       res.status(201).json({
         status: "success",
         message: "User created successfully",
+        access_token: createAccessToken(),
+        token_id: createTokenID(user),
       })
     })
     .catch(error => {
@@ -59,6 +60,8 @@ router.post('/login', (req, res, next) => {
             res.status(201).json({
               status: "success",
               message: "login successful",
+              access_token: createAccessToken(),
+              token_id: createTokenID(user),
             })
           } else {
             res.status(401).json({

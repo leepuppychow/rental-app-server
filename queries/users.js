@@ -13,8 +13,8 @@ const createUser = async (data) => {
   const hashedPW = await argon2.hash(password);
   // should add in error handling here for argon2 hash function
 
-  return db.none('INSERT INTO users(username, password, email, venmo) VALUES($1, $2, $3, $4)',
-        [username, hashedPW, email, venmo]);
+  return db.one(`INSERT INTO users(username, password, email, venmo) 
+    VALUES($1, $2, $3, $4) RETURNING *`, [username, hashedPW, email, venmo]);
 }
 
 module.exports = {
