@@ -3,8 +3,6 @@ const pgp = require('pg-promise')(options);
 const connectionString = 'postgres://localhost:5432/rental_app';
 const db = pgp(connectionString);
 
-// TODO: setup sessions for user auth
-
 const getAllProperties = (req, res, next) => {
   db.any('SELECT * FROM properties')
     .then((data) => {
