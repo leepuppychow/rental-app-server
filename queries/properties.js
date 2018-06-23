@@ -2,22 +2,33 @@ const options = {};
 const pgp = require('pg-promise')(options);
 const connectionString = 'postgres://localhost:5432/rental_app';
 const db = pgp(connectionString);
+const jwt = require('jsonwebtoken');
+
+const decodeJWT = (req) => {
+  const token = req.get('authorization');
+  const userID = jwt.decode(token).id;
+  return userID;
+}
 
 const getAllProperties = (req, res, next) => {
-  db.any('SELECT * FROM properties')
+  const userID = decodeJWT(req);
+  db.any(`SELECT DISTINCT properties.*, rent.amount FROM properties 
+          LEFT JOIN rent ON properties.id = rent.property_id
+          WHERE user_id = ${userID}`)
     .then((data) => {
       res.status(200).json({
         status: 'success',
         data: data,
         message: 'Retrieved all properties',
-      });
+      })
     })
     .catch((err) => next(err));
 }
 
 const getOneProperty = (req, res, next) => {
   const id = parseInt(req.params.id);
-  db.one('SELECT * FROM properties WHERE ID = $1', id)
+  const userID = decodeJWT(req);
+  db.one('SELECT * FROM properties WHERE ID = $1 AND user_id = $2', id, userID)
     .then((data) => {
       res.status(200).json({
         status: 'success',
@@ -28,7 +39,23 @@ const getOneProperty = (req, res, next) => {
 }
 
 const createProperty = (req, res, next) => {
-  
+  const { name, street, city, state, zipcode } = req.body; 
+  const user_id = decodeJWT(req);
+
+  db.one(`INSERT INTO properties(name, street, city, state, zipcode, user_id)
+    VALUES($1, $2, $3, $4, $5, $6) RETURNING *`, [name, street, city, state, zipcode, user_id])
+    .then(() => {
+      res.status(201).json({
+        status: 'success',
+        message: `Created new property with name: ${name}`,
+      })
+    })
+    .catch(error => {
+      res.status(500).json({
+        status: 'error',
+        message: error,
+      })
+    }) 
 }
 
 const updateProperty = (req, res, next) => {
@@ -36,7 +63,17 @@ const updateProperty = (req, res, next) => {
 }
 
 const deleteProperty = (req, res, next) => {
+  const id = parseInt(req.params.id);
+  const user_id = decodeJWT(req);
   
+  db.result('DELETE FROM properties WHERE id = $1 AND user_id = $2', [id, user_id])
+    .then(() => {
+      res.status(200).json({
+        status: 'success',
+        message: `Removed property with ID of ${id}`
+      })
+    })
+    .catch(err => console.log(err))
 }
 
 module.exports = {
@@ -46,19 +83,6 @@ module.exports = {
   updateProperty: updateProperty,
   deleteProperty: deleteProperty,
 }
-
-
-// const createPuppy = (req, res, next) => {
-//     req.body.age = parseInt(req.body.age);
-//     db.none('INSERT INTO PUPS(name, breed, age, sex) VALUES(${name}, ${breed}, ${age}, ${sex})', req.body)
-//         .then(() => {
-//             res.status(200).json({
-//                 status: 'success',
-//                 message: 'Inserted one puppy',
-//             });
-//         })
-//         .catch((err) => next(err));
-// }
 
 // const updatePuppy = (req, res, next) => {
 //     db.none('UPDATE PUPS SET name=$1, breed=$2, age=$3, sex=$4 WHERE id=$5',
@@ -71,16 +95,3 @@ module.exports = {
 //         })
 //         .catch((err) => next(err));
 // }
-
-// const removePuppy = (req, res, next) => {
-//     const pupID = req.params.id;
-//     db.result('DELETE FROM PUPS WHERE ID = $1', pupID)
-//         .then((result) => {
-//             res.status(200).json({
-//                 status: 'success',
-//                 message: `Removed ${result.rowCount} puppy`,
-//             });
-//         })
-//         .catch((err) => next(err));
-// }
-
