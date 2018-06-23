@@ -12,7 +12,9 @@ const decodeJWT = (req) => {
 
 const getAllProperties = (req, res, next) => {
   const userID = decodeJWT(req);
-  db.any(`SELECT * FROM properties WHERE user_id = ${userID}`)
+  db.any(`SELECT DISTINCT properties.*, rent.amount FROM properties 
+          LEFT JOIN rent ON properties.id = rent.property_id
+          WHERE user_id = ${userID}`)
     .then((data) => {
       res.status(200).json({
         status: 'success',
