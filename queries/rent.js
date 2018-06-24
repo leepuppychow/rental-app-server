@@ -14,14 +14,11 @@ const setRentForProperty = (req, res, next) => {
   const propertyID = req.params.property_id;
   const { amount } = req.body;
 
-  console.log("rent amount", amount)
-  console.log("property ID", propertyID)
-
   db.none(`UPDATE rent SET amount=${amount} WHERE rent.property_id = ${propertyID}`)
     .then(() => {
       res.status(200).json({
         status: 'success',
-        message: `Updated rent for property with ID of ${propertyID}`
+        message: `Updated rent for property`
       })
     })
     .catch(err => next(err));

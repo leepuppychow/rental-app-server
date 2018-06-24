@@ -9,6 +9,7 @@ var users = require('./routes/users');
 var properties = require('./routes/properties');
 var tenants = require('./routes/tenants');
 var rent = require('./routes/rent');
+var bills = require('./routes/bills');
 
 var cors = require('cors');
 var app = express();
@@ -31,6 +32,7 @@ app.use('/', users);
 app.use('/api/v1/properties', properties);
 app.use('/api/v1', tenants);
 app.use('/api/v1', rent);
+app.use('/api/v1', bills);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
