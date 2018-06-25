@@ -25,7 +25,8 @@ INSERT INTO properties (name, street, city, state, zipcode, user_id)
 INSERT INTO bills (type, date, amount, property_id)
   VALUES ('Water', '2018-06-24', 50, 1),
           ('Xfinity', '2018-06-24', 61.85, 1),
-          ('Xcel Energy', '2018-06-24', 71.35, 1);
+          ('Xcel Energy', '2018-06-24', 71.35, 1),
+          ('Old bill', '2018-04-24', 100, 1);
 
 INSERT INTO tenants (first_name, last_name, email, phone, venmo) 
   VALUES ('Lee', 'Chow', 'test@gmail.com', '720-123-4567', 'LEEvenmo'),
