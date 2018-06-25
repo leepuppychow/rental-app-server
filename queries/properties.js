@@ -64,9 +64,9 @@ const updateProperty = (req, res, next) => {
 
 const deleteProperty = (req, res, next) => {
   const id = parseInt(req.params.id);
-  const user_id = decodeJWT(req);
+  const userID = decodeJWT(req);
   
-  db.result('DELETE FROM properties WHERE id = $1 AND user_id = $2', [id, user_id])
+  db.result('DELETE FROM properties WHERE id = $1 AND user_id = $2', [id, userID])
     .then(() => {
       res.status(200).json({
         status: 'success',
