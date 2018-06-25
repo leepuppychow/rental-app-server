@@ -11,10 +11,17 @@ const decodeJWT = (req) => {
 }
 
 const setRentForProperty = (req, res, next) => {
+  const userID = decodeJWT(req);
   const propertyID = req.params.property_id;
   const { amount } = req.body;
 
-  db.none(`UPDATE rent SET amount=${amount} WHERE rent.property_id = ${propertyID}`)
+  db.none(`UPDATE rent 
+          SET amount=${amount} 
+          FROM users, properties
+          WHERE rent.property_id = properties.id
+          AND properties.user_id = users.id
+          AND users.id = ${userID}
+          AND rent.property_id = ${propertyID}`)
     .then(() => {
       res.status(200).json({
         status: 'success',
