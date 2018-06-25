@@ -83,15 +83,3 @@ module.exports = {
   updateProperty: updateProperty,
   deleteProperty: deleteProperty,
 }
-
-// const updatePuppy = (req, res, next) => {
-//     db.none('UPDATE PUPS SET name=$1, breed=$2, age=$3, sex=$4 WHERE id=$5',
-//         [req.body.name, req.body.breed, parseInt(req.body.age), req.body.sex, parseInt(req.params.id)])    
-//         .then(() => {
-//             res.status(200).json({
-//                 status: 'success',
-//                 message: `Updated puppy with ID of ${req.params.id}`,
-//             });
-//         })
-//         .catch((err) => next(err));
-// }
