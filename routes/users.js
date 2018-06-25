@@ -42,6 +42,10 @@ router.post('/login', (req, res, next) => {
             })
           } else {
             console.log("Password did not match");
+            res.status(401).json({
+              status: "error",
+              message: "login failed",
+            });
           } 
         })
       })
