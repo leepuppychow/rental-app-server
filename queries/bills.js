@@ -33,13 +33,13 @@ const addNewBill = (req, res, next) => {
   const { propertyID, type, date, amount } = req.body;
 
   db.one(`INSERT INTO bills(type, date, amount, property_id)
-            SELECT ${type}, ${date}, ${amount}, ${propertyID}
+            SELECT '${type}', '${date}', ${amount}, ${propertyID}
             WHERE EXISTS (
-              SELECT bills.id FROM bills
+              SELECT * FROM bills
               JOIN properties ON bills.property_id = properties.id
               JOIN users ON users.id = properties.user_id
-              WHERE users.id = ${userID}
-            )`)
+              WHERE users.id = ${userID})
+          RETURNING *`)
     .then(() => {
       res.status(201).json({
         status: 'success',
