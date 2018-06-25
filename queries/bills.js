@@ -16,7 +16,8 @@ const getAllBills = (req, res, next) => {
   db.any(`SELECT bills.*, bills.property_id FROM bills 
           JOIN properties ON bills.property_id = properties.id
           JOIN users ON users.id = properties.user_id
-          WHERE users.id = ${userID}`)
+          WHERE users.id = ${userID}
+          AND bills.date > CURRENT_DATE - 31`)
     .then(data => {
       res.status(200).json({
         status: 'success',
@@ -27,6 +28,28 @@ const getAllBills = (req, res, next) => {
     .catch((err) => next(err));
 }
 
+const addNewBill = (req, res, next) => {
+  const userID = decodeJWT(req);
+  const { propertyID, type, date, amount } = req.body;
+
+  db.one(`INSERT INTO bills(type, date, amount, property_id)
+          VALUES(${type}, ${date}, ${amount}, ${propertyID})`)
+    .then(() => {
+      res.status(201).json({
+        status: 'success',
+        message: `Created new bill`,
+      })
+    })
+    .catch(error => {
+      res.status(500).json({
+        status: 'error',
+        message: error,
+      })
+    })
+}
+
+
 module.exports = {
   getAllBills: getAllBills,
+  addNewBill: addNewBill,
 }
