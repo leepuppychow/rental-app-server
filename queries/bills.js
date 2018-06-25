@@ -54,8 +54,32 @@ const addNewBill = (req, res, next) => {
     })
 }
 
+const deleteBill = (req, res) => {
+  const userID = decodeJWT(req);
+  const billID = req.params.id;
+
+  db.none(`DELETE FROM bills USING properties, users
+            WHERE bills.property_id = properties.id
+            AND properties.user_id = users.id
+            AND users.id = ${userID}
+            AND bills.id = ${billID}`)
+    .then(() => {
+      res.status(202).json({
+        status: 'success',
+        message: 'Deleted bill successfully',
+      })
+    })
+    .catch(error => {
+      res.status(404).json({
+        status: 'error',
+        message: error,
+      })
+    })
+}
+
 
 module.exports = {
   getAllBills: getAllBills,
   addNewBill: addNewBill,
+  deleteBill: deleteBill,
 }
