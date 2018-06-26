@@ -49,10 +49,11 @@ router.post('/send-email', (req, res, next) => {
           html: `<p>Hi ${tenant.first_name},</p>
                     <p>Rent + utilities for this month is: <strong>$${totalDue}</strong></p>
                     <p>Here is a breakdown of the utilities:</p>
-                      ${billsBreakdown(bills)}
-                    <p>Thanks, and let me know if you have questions</p>
+                    ${billsBreakdown(bills)}
+                    <p>Thanks, and let me know if you have questions,</p>
                     <br/><br/>
-                  <p>-Lee Chow</p>
+                    <p>-Lee Chow</p>
+                    <br/>
                 `,
         }
         transporter.sendMail(mailOptions, (err, info) => {
