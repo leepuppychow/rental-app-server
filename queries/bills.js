@@ -30,10 +30,10 @@ const getAllBills = (req, res, next) => {
 
 const addNewBill = (req, res, next) => {
   const userID = decodeJWT(req);
-  const { propertyID, type, date, amount } = req.body;
+  const { propertyID, type, date, amount, shared } = req.body;
 
-  db.one(`INSERT INTO bills(type, date, amount, property_id)
-            SELECT '${type}', '${date}', ${amount}, ${propertyID}
+  db.one(`INSERT INTO bills(type, date, amount, shared, property_id)
+            SELECT '${type}', '${date}', ${amount}, ${shared}, ${propertyID}
             WHERE EXISTS (
               SELECT * FROM bills
               JOIN properties ON bills.property_id = properties.id
@@ -57,12 +57,13 @@ const addNewBill = (req, res, next) => {
 const updateBill = (req, res) => {
   const userID = decodeJWT(req);
   const billID = req.params.id;
-  const { type, date, amount } = req.body;
+  const { type, date, amount, shared } = req.body;
 
   db.none(`UPDATE bills 
             SET type='${type}',
                 date='${date}',
-                amount=${amount}
+                amount=${amount},
+                shared=${shared}
             FROM users, properties
             WHERE bills.property_id = properties.id
             AND properties.user_id = users.id

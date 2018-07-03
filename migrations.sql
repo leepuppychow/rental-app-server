@@ -45,6 +45,7 @@ CREATE TABLE bills (
   type TEXT,
   date DATE,
   amount FLOAT,
+  shared BOOLEAN,
   property_id INTEGER references properties(id)
 );
 

@@ -22,10 +22,11 @@ INSERT INTO properties (name, street, city, state, zipcode, user_id)
          ('Ash', '456 St', 'here', 'CO', '80211', 1),
          ('Thorn', '879 St', 'here', 'CO', '82211', 1);
 
-INSERT INTO bills (type, date, amount, property_id)
-  VALUES ('Water', '2018-05-20', 50, 1),
-          ('Xfinity', '2018-05-20', 61.85, 1),
-          ('Xcel Energy', '2018-05-20', 71.35, 1);
+INSERT INTO bills (type, date, amount, shared, property_id)
+  VALUES ('Water', '2018-07-01', 50, true, 1),
+          ('Xfinity', '2018-07-20', 61.85, true, 1),
+          ('Xcel Energy', '2018-07-20', 71.35, true, 1),
+          ('Trash', '2018-07-20', 71.35, false, 1);
 
 INSERT INTO tenants (first_name, last_name, email, phone, venmo, active) 
   VALUES ('Lee', 'C', 'lee+1@devetry.com', '720-123-4567', 'LEEvenmo', true),
