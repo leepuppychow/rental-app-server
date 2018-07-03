@@ -29,12 +29,13 @@ const getAllTenants = (req, res, next) => {
     .catch((err) => next(err));
 }
 
-const archiveTenant = (req, res, next) => {
+const toggleTenantActive = (req, res, next) => {
   const userID = decodeJWT(req);
   const tenantID = req.params.id;
+  const active = req.query.active;
 
   db.none(`UPDATE tenants
-          SET status='inactive'
+          SET active=${active}
           FROM users, properties, rent
           WHERE tenants.id = rent.tenant_id
           AND rent.property_id = properties.id
@@ -44,7 +45,7 @@ const archiveTenant = (req, res, next) => {
     .then(() => {
       res.status(200).json({
         status: 'success',
-        message: `Archived tenant for property`
+        message: `Tenant's active status was updated to ${active}`
       })
     })
     .catch(error => {
@@ -91,5 +92,5 @@ const updateTenant = (req, res, next) => {
 module.exports = {
   getAllTenants,
   updateTenant,
-  archiveTenant,
+  toggleTenantActive,
 }

@@ -29,7 +29,7 @@ CREATE TABLE tenants (
   email TEXT,
   phone TEXT,
   venmo TEXT,
-  status TEXT
+  active BOOLEAN
 );
 
 CREATE TABLE rent (
