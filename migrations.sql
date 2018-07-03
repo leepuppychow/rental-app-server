@@ -28,7 +28,8 @@ CREATE TABLE tenants (
   last_name TEXT,
   email TEXT,
   phone TEXT,
-  venmo TEXT
+  venmo TEXT,
+  active BOOLEAN
 );
 
 CREATE TABLE rent (
