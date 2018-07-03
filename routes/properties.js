@@ -3,11 +3,11 @@ var router = express.Router();
 
 const db = require('../queries/properties');
 
-router.get('/', db.getAllProperties);
-router.get('/:id', db.getOneProperty);
-router.post('/', db.createProperty);
-router.put('/:id', db.updateProperty);
-router.delete('/:id', db.deleteProperty); 
+router.get('/properties', db.getAllProperties);
+router.get('/properties/:id', db.getOneProperty);
+router.post('/properties', db.createProperty);
+router.put('/properties/:id', db.updateProperty);
+router.delete('/properties/:id', db.deleteProperty); 
 
 module.exports = router;
 

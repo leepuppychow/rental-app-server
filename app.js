@@ -31,7 +31,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', users);
-app.use('/api/v1/properties', properties);
+app.use('/api/v1', properties);
 app.use('/api/v1', tenants);
 app.use('/api/v1', rent);
 app.use('/api/v1', bills);

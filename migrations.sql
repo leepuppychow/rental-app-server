@@ -14,11 +14,11 @@ CREATE TABLE users (
 
 CREATE TABLE properties (
   ID SERIAL PRIMARY KEY,
-  name TEXT,
   street TEXT,
   city TEXT,
   state TEXT,
   zipcode TEXT,
+  active BOOLEAN,
   user_id INTEGER references users(id) 
 );
 

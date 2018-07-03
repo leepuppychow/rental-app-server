@@ -17,10 +17,10 @@ ALTER SEQUENCE tenant_bills_id_seq RESTART WITH 1;
 INSERT INTO users (username, password, oauth_token, email, venmo)
   VALUES ('lee', '$argon2i$v=19$m=4096,t=3,p=1$qwXZetUPnFFI6o8KMiOixQ$AQwryPRyHWVBwfPz9uJec3N0xJRT6cpJzhfvYWPxAIY', 'blerg', 'test@example.com', '@venmouser');
 
-INSERT INTO properties (name, street, city, state, zipcode, user_id)
-  VALUES ('Zion', '123 Zion', 'here', 'CO', '80011', 1),
-         ('Ash', '456 St', 'here', 'CO', '80211', 1),
-         ('Thorn', '879 St', 'here', 'CO', '82211', 1);
+INSERT INTO properties (street, city, state, zipcode, user_id, active)
+  VALUES ('123 Zion', 'here', 'CO', '80011', 1, true),
+         ('456 St', 'here', 'CO', '80211', 1, true),
+         ('879 St', 'here', 'CO', '82211', 1, true);
 
 INSERT INTO bills (type, date, amount, shared, property_id)
   VALUES ('Water', '2018-07-01', 50, true, 1),

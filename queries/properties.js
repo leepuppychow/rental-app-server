@@ -39,15 +39,15 @@ const getOneProperty = (req, res, next) => {
 }
 
 const createProperty = (req, res, next) => {
-  const { name, street, city, state, zipcode } = req.body; 
+  const { street, city, state, zipcode } = req.body; 
   const user_id = decodeJWT(req);
 
-  db.one(`INSERT INTO properties(name, street, city, state, zipcode, user_id)
-    VALUES($1, $2, $3, $4, $5, $6) RETURNING *`, [name, street, city, state, zipcode, user_id])
+  db.one(`INSERT INTO properties(street, city, state, zipcode, user_id)
+    VALUES($1, $2, $3, $4, $5) RETURNING *`, [street, city, state, zipcode, user_id])
     .then(() => {
       res.status(201).json({
         status: 'success',
-        message: `Created new property with name: ${name}`,
+        message: `Created new property with street: ${street}`,
       })
     })
     .catch(error => {
