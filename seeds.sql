@@ -28,10 +28,10 @@ INSERT INTO bills (type, date, amount, property_id)
           ('Xcel Energy', '2018-05-20', 71.35, 1);
 
 INSERT INTO tenants (first_name, last_name, email, phone, venmo, active) 
-  VALUES ('Lee', 'Chow', 'lee+1@devetry.com', '720-123-4567', 'LEEvenmo', true),
-        ('John', 'Peacock', 'lee+2@devetry.com', '720-123-4567', 'JOHNvenmo', true),
-        ('Tom', 'King', 'lee+3@devetry.com', '720-123-4567', 'TOMvenmo', true),
-        ('Ilona', 'Hoang', 'lee+4@devetry.com', '720-123-4567', 'ILONAvenmo', true);
+  VALUES ('Lee', 'C', 'lee+1@devetry.com', '720-123-4567', 'LEEvenmo', true),
+        ('John', 'P', 'lee+2@devetry.com', '720-123-4567', 'JOHNvenmo', true),
+        ('Tom', 'K', 'lee+3@devetry.com', '720-123-4567', 'TOMvenmo', true),
+        ('Ilona', 'H', 'lee+4@devetry.com', '720-123-4567', 'ILONAvenmo', true);
 
 INSERT INTO rent (amount, status, property_id, tenant_id)
   VALUES (650, 'unpaid', 1, 1),
