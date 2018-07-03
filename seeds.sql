@@ -15,7 +15,7 @@ ALTER SEQUENCE bills_id_seq RESTART WITH 1;
 ALTER SEQUENCE tenant_bills_id_seq RESTART WITH 1;
 
 INSERT INTO users (username, password, oauth_token, email, venmo)
-  VALUES ('lee',  'blah', 'blerg', 'test@example.com', '@venmouser');
+  VALUES ('lee', '$argon2i$v=19$m=4096,t=3,p=1$qwXZetUPnFFI6o8KMiOixQ$AQwryPRyHWVBwfPz9uJec3N0xJRT6cpJzhfvYWPxAIY', 'blerg', 'test@example.com', '@venmouser');
 
 INSERT INTO properties (name, street, city, state, zipcode, user_id)
   VALUES ('Zion', '123 Zion', 'here', 'CO', '80011', 1),
@@ -23,16 +23,15 @@ INSERT INTO properties (name, street, city, state, zipcode, user_id)
          ('Thorn', '879 St', 'here', 'CO', '82211', 1);
 
 INSERT INTO bills (type, date, amount, property_id)
-  VALUES ('Water', '2018-06-24', 50, 1),
-          ('Xfinity', '2018-06-24', 61.85, 1),
-          ('Xcel Energy', '2018-06-24', 71.35, 1),
-          ('Old bill', '2018-04-24', 100, 1);
+  VALUES ('Water', '2018-05-20', 50, 1),
+          ('Xfinity', '2018-05-20', 61.85, 1),
+          ('Xcel Energy', '2018-05-20', 71.35, 1);
 
-INSERT INTO tenants (first_name, last_name, email, phone, venmo) 
-  VALUES ('Lee', 'Chow', 'test@gmail.com', '720-123-4567', 'LEEvenmo'),
-        ('John', 'Peacock', 'John@gmail.com', '720-123-4567', 'JOHNvenmo'),
-        ('Tom', 'King', 'Tom@gmail.com', '720-123-4567', 'TOMvenmo'),
-        ('Ilona', 'Hoang', 'Ilona@gmail.com', '720-123-4567', 'ILONAvenmo');
+INSERT INTO tenants (first_name, last_name, email, phone, venmo, status) 
+  VALUES ('Lee', 'Chow', 'lee+1@devetry.com', '720-123-4567', 'LEEvenmo', 'active'),
+        ('John', 'Peacock', 'lee+2@devetry.com', '720-123-4567', 'JOHNvenmo', 'active'),
+        ('Tom', 'King', 'lee+3@devetry.com', '720-123-4567', 'TOMvenmo', 'active'),
+        ('Ilona', 'Hoang', 'lee+4@devetry.com', '720-123-4567', 'ILONAvenmo', 'active');
 
 INSERT INTO rent (amount, status, property_id, tenant_id)
   VALUES (650, 'unpaid', 1, 1),

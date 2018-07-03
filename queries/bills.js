@@ -54,6 +54,29 @@ const addNewBill = (req, res, next) => {
     })
 }
 
+const updateBill = (req, res) => {
+  const userID = decodeJWT(req);
+  const billID = req.params.id;
+  const { type, date, amount } = req.body;
+
+  db.none(`UPDATE bills 
+            SET type='${type}',
+                date='${date}',
+                amount=${amount}
+            FROM users, properties
+            WHERE bills.property_id = properties.id
+            AND properties.user_id = users.id
+            AND users.id = ${userID}
+            AND bills.id = ${billID}`)
+    .then(() => {
+      res.status(200).json({
+        status: 'success',
+        message: `Updated bill for property`
+      })
+    })
+    .catch(err => console.log({ err }));
+}
+
 const deleteBill = (req, res) => {
   const userID = decodeJWT(req);
   const billID = req.params.id;
@@ -82,4 +105,5 @@ module.exports = {
   getAllBills: getAllBills,
   addNewBill: addNewBill,
   deleteBill: deleteBill,
+  updateBill: updateBill,
 }

@@ -28,9 +28,7 @@ const todayDate = () => {
 }
 
 const billsBreakdown = (bills) => {
-  return bills.reduce((string, bill) => {
-    return string += `<li>${bill.type}: $${bill.amount}</li>`
-  }, '')
+  return bills.reduce((string, bill) => string += `<li>${bill.type}: $${bill.amount}</li>`, '');
 }
 
 router.post('/send-email', (req, res, next) => {
