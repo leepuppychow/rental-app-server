@@ -12,8 +12,7 @@ const decodeJWT = (req) => {
 
 const getAllProperties = (req, res, next) => {
   const userID = decodeJWT(req);
-  db.any(`SELECT DISTINCT properties.*, rent.amount FROM properties 
-          LEFT JOIN rent ON properties.id = rent.property_id
+  db.any(`SELECT properties.* FROM properties 
           WHERE user_id = ${userID}`)
     .then((data) => {
       res.status(200).json({
@@ -39,15 +38,15 @@ const getOneProperty = (req, res, next) => {
 }
 
 const createProperty = (req, res, next) => {
-  const { name, street, city, state, zipcode } = req.body; 
+  const { street, city, state, zipcode, active, rent } = req.body; 
   const user_id = decodeJWT(req);
 
-  db.one(`INSERT INTO properties(name, street, city, state, zipcode, user_id)
-    VALUES($1, $2, $3, $4, $5, $6) RETURNING *`, [name, street, city, state, zipcode, user_id])
+  db.one(`INSERT INTO properties(street, city, state, zipcode, user_id, active, rent)
+    VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *`, [street, city, state, zipcode, user_id, active, rent])
     .then(() => {
       res.status(201).json({
         status: 'success',
-        message: `Created new property with name: ${name}`,
+        message: `Created new property: ${street}`,
       })
     })
     .catch(error => {
@@ -59,7 +58,35 @@ const createProperty = (req, res, next) => {
 }
 
 const updateProperty = (req, res, next) => {
-  
+  // USE THIS ROUTE TO SET RENT FOR PROPERTY
+  const userID = decodeJWT(req);
+  const propertyID = req.params.id;
+  const { street, city, state, zipcode, active, rent } = req.body;
+
+  db.none(`UPDATE properties
+            SET street='${street}',
+            city='${city}',
+            state='${state}',
+            zipcode='${zipcode}',
+            active=${active},
+            rent=${rent}
+          FROM users
+          WHERE properties.user_id = users.id
+          AND users.id=${userID}
+          AND properties.id=${propertyID}`)
+    .then(() => {
+      res.status(200).json({
+        status: 'success',
+        message: `Updated property`
+      })
+    })
+    .catch(error => {
+      console.log(error)
+      res.status(500).json({
+        status: 'error',
+        error,
+      })
+    })
 }
 
 const deleteProperty = (req, res, next) => {

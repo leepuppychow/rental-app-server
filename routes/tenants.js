@@ -5,7 +5,7 @@ const db = require('../queries/tenants');
 
 router.get('/tenants', db.getAllTenants);
 // router.get('/:id', db.getOneTenant);
-// router.post('/', db.createTenant);
+router.post('/tenants', db.createTenant);
 router.put('/tenants/:id', db.updateTenant);
 router.delete('/tenants/:id', db.toggleTenantActive); 
 
