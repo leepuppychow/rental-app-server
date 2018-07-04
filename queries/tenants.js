@@ -57,9 +57,56 @@ const toggleTenantActive = (req, res, next) => {
     })
 }
 
+const createTenant = (req, res, next) => {
+  const userID = decodeJWT(req);
+  const { firstName, lastName, email, phone, active, venmo, propertyID, rent } = req.body;
+  let newTenantID;
+
+  db.one(`INSERT INTO tenants(first_name, last_name, email, phone, venmo, active)
+          SELECT '${firstName}', '${lastName}', '${email}', '${phone}', '${venmo}', ${active}
+          WHERE EXISTS (
+            SELECT * FROM tenants 
+            JOIN rent ON tenants.id = rent.tenant_id
+            JOIN properties ON properties.id = rent.property_id
+            JOIN users ON users.id = properties.user_id
+            WHERE users.id = ${userID}
+            AND properties.id = ${propertyID})
+          RETURNING tenants.id`)
+    .then((response) => {
+      newTenantID = response.id;
+      db.none(`INSERT INTO rent(amount, status, property_id, tenant_id)
+               VALUES(${rent}, 'unpaid', ${propertyID}, ${newTenantID})`)
+        .then(() => {
+          console.log(`successfully added to rent table for tenant: ${newTenantID}`)
+        })
+        .catch(error => console.log(error));      
+    })
+    .then(() => {
+      db.none(`INSERT INTO tenant_bills(split_amount, status, tenant_id)
+               VALUES(null, 'unpaid', ${newTenantID})`)
+        .then(() => {
+          console.log(`successfully added to tenant_bills for tenant: ${newTenantID}`)
+        })
+        .catch(error => console.log(error));      
+    })
+    .then(() => {
+      res.status(201).json({
+        status: 'success',
+        message: `Created new tenant`,
+      })
+    })
+    .catch(error => {
+      console.log(error)
+      res.status(500).json({
+        status: 'error',
+        message: error,
+      })
+    })
+}
+
 const updateTenant = (req, res, next) => { 
   const userID = decodeJWT(req);
-  const { firstName, lastName, email, phone, status, venmo } = req.body;
+  const { firstName, lastName, email, phone, active, venmo } = req.body;
   const tenantID = req.params.id;
 
   db.one(`UPDATE tenants
@@ -67,7 +114,7 @@ const updateTenant = (req, res, next) => {
               last_name='${lastName}',
               email='${email}',
               phone='${phone}',
-              status='${status}',
+              active='${active}',
               venmo='${venmo}'
           FROM users, properties, rent 
           WHERE tenants.id = rent.tenant_id
@@ -92,5 +139,6 @@ const updateTenant = (req, res, next) => {
 module.exports = {
   getAllTenants,
   updateTenant,
+  createTenant,
   toggleTenantActive,
 }

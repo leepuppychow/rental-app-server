@@ -11,6 +11,7 @@ describe('GET /properties', () => {
   it('should get all properties/', (done) => {
     chai.request(server)
     .get('/api/v1/properties')
+    .set('authorization', 'foobar')
     .end((err, res) => {
       should.not.exist(err);
       res.status.should.equal(200);
