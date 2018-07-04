@@ -16,10 +16,9 @@ const setTenantBillsForProperty = (req, res, next) => {
 
   db.any(`UPDATE tenant_bills 
           SET split_amount=${splitAmount} 
-          FROM users, properties, rent, tenants
+          FROM users, properties, tenants
           WHERE users.id = properties.user_id
-          AND rent.property_id = properties.id
-          AND tenants.id = rent.tenant_id
+          AND properties.id = tenants.property_id
           AND tenant_bills.tenant_id = tenants.id
           AND properties.id = ${propertyID}
           AND users.id = ${userID}`)
