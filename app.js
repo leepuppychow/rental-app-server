@@ -9,8 +9,10 @@ var users = require('./routes/users');
 var properties = require('./routes/properties');
 var tenants = require('./routes/tenants');
 var bills = require('./routes/bills');
+var rooms = require('./routes/rooms');
 var tenantBills = require('./routes/tenant-bills');
-var mailer = require('./mailer/mailer');
+var mailer = require('./services/mailer');
+var pdf = require('./services/pdf');
 
 var cors = require('cors');
 var app = express();
@@ -33,8 +35,10 @@ app.use('/', users);
 app.use('/api/v1', properties);
 app.use('/api/v1', tenants);
 app.use('/api/v1', bills);
+app.use('/api/v1', rooms);
 app.use('/api/v1', tenantBills);
 app.use('/api/v1', mailer);
+app.use('/api/v1', pdf);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

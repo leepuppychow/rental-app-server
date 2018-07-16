@@ -18,7 +18,8 @@ const setTenantBillsForProperty = (req, res, next) => {
           SET split_amount=${splitAmount} 
           FROM users, properties, tenants
           WHERE users.id = properties.user_id
-          AND properties.id = tenants.property_id
+          AND properties.id = rooms.property_id
+          AND rooms.tenant_id = tenants.id
           AND tenant_bills.tenant_id = tenants.id
           AND properties.id = ${propertyID}
           AND users.id = ${userID}`)

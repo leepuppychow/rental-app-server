@@ -38,11 +38,11 @@ const getOneProperty = (req, res, next) => {
 }
 
 const createProperty = (req, res, next) => {
-  const { street, city, state, zipcode, active, rent } = req.body; 
+  const { street, city, state, zipcode, active } = req.body; 
   const user_id = decodeJWT(req);
 
-  db.one(`INSERT INTO properties(street, city, state, zipcode, user_id, active, rent)
-    VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *`, [street, city, state, zipcode, user_id, active, rent])
+  db.one(`INSERT INTO properties(street, city, state, zipcode, user_id, active)
+    VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *`, [street, city, state, zipcode, user_id, active])
     .then(() => {
       res.status(201).json({
         status: 'success',
@@ -58,18 +58,16 @@ const createProperty = (req, res, next) => {
 }
 
 const updateProperty = (req, res, next) => {
-  // USE THIS ROUTE TO SET RENT FOR PROPERTY
   const userID = decodeJWT(req);
   const propertyID = req.params.id;
-  const { street, city, state, zipcode, active, rent } = req.body;
+  const { street, city, state, zipcode, active } = req.body;
 
   db.none(`UPDATE properties
             SET street='${street}',
             city='${city}',
             state='${state}',
             zipcode='${zipcode}',
-            active=${active},
-            rent=${rent}
+            active=${active}
           FROM users
           WHERE properties.user_id = users.id
           AND users.id=${userID}

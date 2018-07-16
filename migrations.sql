@@ -19,7 +19,6 @@ CREATE TABLE properties (
   state TEXT,
   zipcode TEXT,
   active BOOLEAN,
-  rent FLOAT,  
   user_id INTEGER references users(id) 
 );
 
@@ -30,8 +29,16 @@ CREATE TABLE tenants (
   email TEXT,
   phone TEXT,
   venmo TEXT,
-  active BOOLEAN,
-  property_id INTEGER references properties(id)
+  active BOOLEAN
+);
+
+CREATE TABLE rooms (
+  ID SERIAL PRIMARY KEY,
+  name TEXT,
+  rent FLOAT,
+  sq_ft INTEGER,
+  property_id INTEGER references properties(id),
+  tenant_id INTEGER references tenants(id)
 );
 
 CREATE TABLE bills (
@@ -49,4 +56,20 @@ CREATE TABLE tenant_bills (
   status TEXT,
   date DATE,
   tenant_id INTEGER references tenants(id)
+);
+
+CREATE TABLE leases (
+  ID SERIAL PRIMARY KEY,
+  name TEXT,
+  url TEXT,
+  date DATE,
+  tenant_id INTEGER references tenants(id)
+);
+
+CREATE TABLE emails (
+  ID SERIAL PRIMARY KEY,
+  type TEXT,
+  date DATE,
+  recipient TEXT,
+  content JSON
 );
